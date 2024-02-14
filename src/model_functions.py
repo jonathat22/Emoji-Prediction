@@ -27,7 +27,6 @@ class ModelHelperFunctions(nn.Module):
 
     def validate(self, batch):
         line, labels = batch
-        #line = line.reshape(3, sequence_length, embedding_dim)
         line, labels = line.to(torch.device("mps")), labels.to(torch.device("mps"))
         output = self(line)
         loss = F.cross_entropy(output, labels)
