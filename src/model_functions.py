@@ -32,8 +32,10 @@ class ModelHelperFunctions(nn.Module):
     Model helper functions to be inherited by GRU model
 
     Functions:
-    training_step -- takes a batch of data, carries out training step to return loss
-    validate -- 
+    training_step -- takes a batch of data, computes training loss
+    validate -- takes batch of data, computes validation loss
+    validation_results -- combines batch losses and accuracies to get per-epoch loss and accuracy
+    result_per_epoch -- prints formatted results per epoch
     """
     def training_step(self, batch):
         lines, labels = batch
