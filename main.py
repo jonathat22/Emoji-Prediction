@@ -9,13 +9,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from src.data_functions import *
 from src.model_functions import *
+import bentoml
 
 
 def main():
     batch_size = 3
     X_train, y_train = read_emoji_csv('Data/train_emoji.csv')
     X_test, y_test = read_emoji_csv('Data/test_emoji.csv')
-    train_loader, test_loader, embedding_layer, max_length = build_dataloaders(X_train, X_test, y_train, y_test, batch_size)
+    max_length  = len(max(X_train, key=len).split())
+    embedding_layer, word2idx, idx2word = torch_pretrained_embedding()
+    train_loader, test_loader = build_dataloaders(X_train, X_test, y_train, y_test, word2idx, max_length, batch_size)
 
     embedding_dim = 50
     sequence_length = max_length
@@ -44,6 +47,14 @@ def main():
                          optimizer=optimizer)
 
     torch.save(model.state_dict(), "model/emoji_model.pt")
+    bentoml.pytorch.save_model(
+        "emoji_bentoml_model", 
+        model,
+        signatures={
+            "forward": {
+                "batchable": False,
+            }
+        })
     plot_results(history, epoch_lst)
 
 

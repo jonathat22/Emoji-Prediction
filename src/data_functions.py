@@ -104,7 +104,7 @@ class EmojiDataset():
 
 
 
-def build_dataloaders(X_train, X_test, y_train, y_test, batch_size):
+def build_dataloaders(X_train, X_test, y_train, y_test, word2idx, max_length, batch_size):
     """
     Constructs train and test data loaders
 
@@ -118,8 +118,6 @@ def build_dataloaders(X_train, X_test, y_train, y_test, batch_size):
     train_loader -- train DataLoader object
     test_loader -- test DataLoader object
     """
-    embedding_layer, word2idx, idx2word = torch_pretrained_embedding()
-    max_length  = len(max(X_train, key=len).split())
     X_train_indices = sentences_to_indices(X_train, word2idx, max_length)
     X_test_indices = sentences_to_indices(X_test, word2idx, max_length)
     y_train_oh = convert_to_one_hot(y_train, num_emojis = 30)
@@ -129,4 +127,4 @@ def build_dataloaders(X_train, X_test, y_train, y_test, batch_size):
     train_loader = DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size=batch_size, shuffle=False)
 
-    return train_loader, test_loader, embedding_layer, max_length
+    return train_loader, test_loader
