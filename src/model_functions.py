@@ -82,8 +82,13 @@ class GRUNet(ModelHelperFunctions):
         self.fc = nn.Linear(hidden_dim, num_classes)
         self.softmax = nn.LogSoftmax(dim=1)
 
-    def forward(self, x):
-        hidden = torch.zeros(self.num_layers, self.batch_size, self.hidden_dim).to(torch.device("mps"))
+    def forward(self, x, predict=False):
+        if predict == True:
+            self.batch_size = 1
+            hidden = torch.zeros(self.num_layers, self.batch_size, self.hidden_dim)
+        else:
+            hidden = torch.zeros(self.num_layers, self.batch_size, self.hidden_dim).to(torch.device("mps"))
+            
         x = self.embeddings(x.to(torch.int64))
         out, _ = self.gru(x, hidden) # shape: (batch_size, seq_length, hidden_size)
         out = self.fc(out[:, -1, :])
