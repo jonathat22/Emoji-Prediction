@@ -2,7 +2,8 @@ import streamlit as st
 import requests
 import numpy as np
 import torch
-import io
+import emoji
+from src.map_pred_to_emoji import *
 
 
 API_ENDPOINT = "http://localhost:3000/predict"
@@ -33,13 +34,17 @@ def main():
                 prediction = int(prediction[1]) # output is [2] or [26], for example, so the if elif statements are extracting the numbers
             elif len(prediction) == 4:
                 prediction = int(prediction[1:3])
-            st.write(prediction)
+            emoji_map = build_emoji_df(filepath="Data/full_emoji.csv")
+            emoji_name = emoji_map['name'].iloc[prediction]
+            st.title(emoji.emojize(f":{emoji_name}:"))
             #st.success(f"Your predicted emoji is {prediction:.3f}")
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
             st.write(len(sentence.split()))
     else:
         st.write("You didn't type in a sentence!")
+        st.write("\U0001F603")
+        
 
 
 
