@@ -10,7 +10,7 @@ API_ENDPOINT = "http://localhost:3000/predict"
 
 st.title("Emoji Prediction Using Deep Learning")
 
-st.text("Type in a sentence and recieve a sentiment classification prediction in the form of an emoji!")
+st.header("Type in a sentence and recieve a sentiment classification prediction in the form of an emoji!")
 
 
 def predict(sentence):
