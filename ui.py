@@ -164,6 +164,7 @@ with st.sidebar:
     st.write("4. [Understanding Gated Recurrent Unit (GRU) in Deep Learning](https://medium.com/@anishnama20/understanding-gated-recurrent-unit-gru-in-deep-learning-2e54923f3e2)")
     st.write("5. [A complete Guide to Natural Language Processing by DeepLearning.AI](https://www.deeplearning.ai/resources/natural-language-processing/)")
     st.write("6. [Unlocking Emotions with AI: Emoji Prediction using LSTM](https://medium.com/@govinnachiran/unlocking-emotions-with-ai-emoji-prediction-using-lstm-e673662fd7e3)")
+    st.write("7. [Understanding LSTM Networks via colah's blog](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)")
     
 
 
