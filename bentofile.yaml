@@ -3,6 +3,7 @@ include:
  - "bento_service.py"
  - "src/data_functions.py"
  - "src/model_functions.py"
+ - "src/map_pred_to_emoji.py"
 python:
   packages:
    - bentoml==1.2.4
