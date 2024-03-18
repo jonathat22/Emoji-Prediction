@@ -12,3 +12,4 @@ python:
    - Requests==2.31.0
    - torch==2.2.0
    - torchtext==0.17.0
+   - emoji==2.9.0
