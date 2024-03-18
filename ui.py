@@ -6,8 +6,8 @@ import emoji
 import unicodeit
 from src.map_pred_to_emoji import *
 
-
-API_ENDPOINT = "http://localhost:3000/predict"
+# "http://localhost:3000/predict"
+API_ENDPOINT = "https://emoji-prediction-jafwv9ojxlfkrgt4mvgsvj.streamlit.app/predict"
 
 st.set_page_config(layout="wide")
 
