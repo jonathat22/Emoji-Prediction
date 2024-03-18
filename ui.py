@@ -4,7 +4,6 @@ import numpy as np
 import torch
 import emoji
 import unicodeit
-from src.subscript_helpers import subs
 from src.map_pred_to_emoji import *
 
 
