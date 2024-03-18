@@ -5,3 +5,5 @@ pandas==2.0.1
 Requests==2.31.0
 torch==2.2.1
 torchtext==0.17.1
+emoji==2.9.0
+unicodeit==0.7.5
