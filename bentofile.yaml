@@ -14,3 +14,4 @@ python:
    - torch==2.2.0
    - torchtext==0.17.0
    - emoji==2.9.0
+   - unicodeit==0.7.5
