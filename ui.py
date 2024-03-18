@@ -3,6 +3,8 @@ import requests
 import numpy as np
 import torch
 import emoji
+import unicodeit
+from src.subscript_helpers import subs
 from src.map_pred_to_emoji import *
 
 
@@ -103,46 +105,54 @@ with st.expander("All about GRUs \U0001F9E0"):
         and Gated Recurrent Unit (GRU) network architectures.
     """)
 
+    col1.header("Gated Recurrent Unit Network")
 
-    ##############################################    GRU Section     ##########################################
-
-
-    col2.header("Gated Recurrent Unit Network")
-
-    col2.write("""
+    col1.write("""
         The Gated Recurrent Unit (GRU) network is a more evolved version of the basic RNN and has architectural features that can solve the
         vanishing gradient problem.
     """)
 
-    col2.write("""
+    col1.write("""
         Like RNNs, GRUs process data sequentially and passes information as it progates forward.
-        A GRU cell uses hidden state (ct) and gates that control what information is kept or forgotten.
-    """)
+        A GRU cell uses hidden state ***({})*** and gates that control what information is kept or forgotten.
+    """.format(unicodeit.replace('H_t')))
 
-    col2.image("diagram_images/GRU_diagram.png", caption="Figure 2: Diagram of GRU Cell", width=550)
+
+    ##############################################    GRU Section     ##########################################
+
+
+    col2.image("diagram_images/GRU_diagram.png", caption="Figure 2: Diagram of GRU Cell", width=650)
 
     col2.write("""
         The GRU architecture contains several key components that allow it selectively keep or forget information over time.
 
-        -- **Hidden state (Ht)**: vector of numbers that represents the network's memory of the previous inputs, gets updated based 
-           on the current input (Xt) and the previous hidden state (Ht-1)
+        -- **Hidden state**: vector of numbers that represents the network's memory of the previous inputs, gets updated based 
+           on the current input and the previous hidden state
     """)
 
     col2.write("""
-        -- **Reset Gate (Rt)**: Concatenates Xt and Ht-1 vectors, passes this concatenated vector through the sigmoid function to determine 
-           how much of the Ht-1 should be forgotten
+        -- **Reset Gate**: Concatenates the current input and previous hidden state vectors, passes this concatenated vector through the sigmoid function to determine 
+           how much of the previous hidden state should be forgotten
     """)
 
     col2.write("""
-        -- **Update Gate (Zt)**: Like the Reset Gate, the Update Gate uses Xt and Ht-1, but the Update Gate determines
-           how much of the candidate activation vector will be included in the new hidden state (Ht+1)
+        -- **Update Gate**: The Update Gate determines how much of the candidate activation 
+           vector will be included in the new hidden state
     """)
 
     col2.write("""
-        --**Candidate Activation Vector**: This is a vector that combines the "reset" version of Ht-1 with Xt
-        and is pushed through the tanh function to squeeze values between -1 and 1. This helps regulate the network.
-        This vector is used to update Ht+1
+        --**Candidate Activation Vector**: This is a vector that combines the "reset" version of previous hidden state with
+        the current input and is pushed through the tanh function to squeeze values between -1 and 1. This helps regulate the network.
+        This vector is used to update next hidden state
     """)
+
+    col2.latex(r'''\tag{Reset Gate} R_t = \sigma(X_tW_{xr} + H_{t-1}W_{hr} + b_r)''')
+    col2.latex(r'''\tag{Update Gate} Z_t = \sigma(X_tW_{xz} + H_{t-1}W_{hz} + b_z)''')
+    col2.latex(r'''\tag{Candidate} \tilde{H_t} = tanh(X_tW_{xh} + (R_t\odot{H_{t-1}})W_{hh} + b_h)''')
+    col2.latex(r'''\tag{Hidden State} H_t = Z_t\odot{H_{t-1}} + (1-Z_t)\odot{\tilde{H_t}}''')
+    col2.write("Note: Wxr, Whr, Wxz, Whz, Wxh, Whh are weight matricies, br, bz, bh are bias parameters. These are the parameters that are learned during training.")
+
+
 
     
 
@@ -165,6 +175,8 @@ with st.sidebar:
     st.write("5. [A complete Guide to Natural Language Processing by DeepLearning.AI](https://www.deeplearning.ai/resources/natural-language-processing/)")
     st.write("6. [Unlocking Emotions with AI: Emoji Prediction using LSTM](https://medium.com/@govinnachiran/unlocking-emotions-with-ai-emoji-prediction-using-lstm-e673662fd7e3)")
     st.write("7. [Understanding LSTM Networks via colah's blog](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)")
+
+    st.latex(r'''a_{n-i}''')
     
 
 
