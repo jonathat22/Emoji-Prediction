@@ -44,13 +44,13 @@ st.write("""
 ####################################### Model Inference #############################################
 
 
-@st.cache_data
+@st.cache_data()
 def load_embeddings():
     embedding_layer, word2idx, idx2word = torch_pretrained_embedding()
     return embedding_layer, word2idx, idx2word
 
 
-@st.cache_resource
+@st.cache_resource()
 def load_model(_embedding_layer):
     model = GRUNet(input_dim=10, 
                 hidden_dim=128,
