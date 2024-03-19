@@ -46,7 +46,7 @@ st.write("""
 
 @st.cache_data
 def load_embeddings():
-    embedding_layer, word2idx, idx2word = torch_pretrained_embedding()
+    embedding_layer, word2idx, idx2word = torch_pretrained_embedding(load=True)
     return embedding_layer, word2idx, idx2word
 
 
