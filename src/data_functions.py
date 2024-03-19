@@ -79,7 +79,7 @@ def torch_pretrained_embedding(load=False):
     idx2word -- dictionary mapping index to word
     """
     if load == True:
-        glove = torch.load("saved_glove.pt")
+        glove = torch.load("src/saved_glove.pt")
     else:
         glove = torchtext.vocab.GloVe(name='6B', dim=50)
 
