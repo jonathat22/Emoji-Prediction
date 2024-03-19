@@ -5,7 +5,9 @@ import torch
 import emoji
 import unicodeit
 from src.map_pred_to_emoji import *
-from predict import *
+#from predict import *
+from src.data_functions import *
+from src.model_functions import *
 
 
 
@@ -39,11 +41,59 @@ st.write("""
 """)
 
 
+####################################### Model Inference #############################################
+
+
+@st.cache_data
+def load_embeddings():
+    embedding_layer, word2idx, idx2word = torch_pretrained_embedding()
+    return embedding_layer, word2idx, idx2word
+
+
+@st.cache_data
+def load_model(_embedding_layer):
+    model = GRUNet(input_dim=10, 
+                hidden_dim=128,
+                num_classes=30,
+                num_layers=2,
+                embedding_layer=_embedding_layer,
+                embedding_dim=50,
+                batch_size=3)
+
+    model.load_state_dict(torch.load("emoji_model.pt"))
+
+    return model
+
+
+def prepare_data(sentence_str, word_to_idx, max_length=10):
+    sentence_str = np.array([sentence_str])
+    sentence_str = sentences_to_indices(sentence_str, word_to_idx, max_length)
+    prepared_data = torch.from_numpy(sentence_str)
+    return prepared_data
+
+
+def predict(prepared_data, model):
+    """
+    Returns emoji classification prediction for a sample test sentence
+    """
+    with torch.no_grad():
+        predictions = model.forward(prepared_data, predict=True)
+        _, max_prediction = torch.max(predictions, dim=1)
+    result = max_prediction.numpy()
+
+    return result
+
+
 def main():
+    embedding_layer, word2idx, idx2word = load_embeddings()
     sentence = st.text_input("Type in your sentence here")
+    model = load_model(embedding_layer)
+    model.eval()
+    st.write(len(sentence.split()))
     if len(sentence.split()) > 0:
         if len(sentence.split()) <= 10: # max sequence length is 10
-            prediction = predict(sentence)[0]
+            prepared_data = prepare_data(sentence, word2idx)
+            prediction = predict(prepared_data, model)[0]
             emoji_map = build_emoji_df(filepath="Data/full_emoji.csv")
             emoji = emoji_map['emoji'].iloc[prediction]
             st.title(emoji)
@@ -59,7 +109,7 @@ def main():
 with st.expander("All about GRUs \U0001F9E0"):
     col1, col2 = st.columns(2)
 
-    #######################################    RNN Section   ########################################################
+############################################    RNN Section   ########################################################
 
 
     col1.header("Recurrent Neural Network")
@@ -134,13 +184,6 @@ with st.expander("All about GRUs \U0001F9E0"):
     col2.latex(r'''\tag{Candidate} \tilde{H_t} = tanh(X_tW_{xh} + (R_t\odot{H_{t-1}})W_{hh} + b_h)''')
     col2.latex(r'''\tag{Hidden State} H_t = Z_t\odot{H_{t-1}} + (1-Z_t)\odot{\tilde{H_t}}''')
     col2.write("Note: Wxr, Whr, Wxz, Whz, Wxh, Whh are weight matricies, br, bz, bh are bias parameters. These are the parameters that are learned during training.")
-
-
-
-    
-
-
-        
 
 
 with st.sidebar:
