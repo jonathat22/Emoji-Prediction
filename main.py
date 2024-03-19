@@ -46,15 +46,8 @@ def main():
                          lr=learning_rate,
                          optimizer=optimizer)
 
-    torch.save(model.state_dict(), "model/emoji_model.pt")
-    bentoml.pytorch.save_model(
-        "emoji_bentoml_model", 
-        model,
-        signatures={
-            "forward": {
-                "batchable": False,
-            }
-        })
+    torch.save(model.state_dict(), "emoji_model.pt")
+
     plot_results(history, epoch_lst)
 
 
