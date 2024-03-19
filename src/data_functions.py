@@ -79,10 +79,10 @@ def torch_pretrained_embedding(load=False):
     idx2word -- dictionary mapping index to word
     """
     if load == True:
-        glove = torch.load("/Users/Jonathan/Desktop/Errythang/SKILLZ/Emoji-Prediction/saved_glove.pt")
+        glove = torch.load("saved_glove.pt")
     else:
         glove = torchtext.vocab.GloVe(name='6B', dim=50)
-        
+
     word2idx = glove.stoi
     idx2word = glove.itos
     embedding_layer = nn.Embedding.from_pretrained(glove.vectors, freeze=True)
