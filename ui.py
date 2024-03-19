@@ -7,7 +7,7 @@ import unicodeit
 from src.map_pred_to_emoji import *
 
 # "http://localhost:3000/predict"
-API_ENDPOINT = "localhost:3000/#/Service%20APIs/emoji_bentoml_model_service__predict"
+API_ENDPOINT = "https://emoji-prediction-jafwv9ojxlfkrgt4mvgsvj.streamlit.app"
 
 st.set_page_config(layout="wide")
 
