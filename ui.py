@@ -50,7 +50,7 @@ def load_embeddings():
     return embedding_layer, word2idx, idx2word
 
 
-@st.cache_resource
+@st.cache_data
 def load_model(_embedding_layer):
     model = GRUNet(input_dim=10, 
                 hidden_dim=128,
