@@ -55,6 +55,7 @@ def main():
     if len(sentence.split()) > 0:
         if len(sentence.split()) <= 10: # max sequence length is 10
             prediction = predict(sentence)
+            st.write(prediction)
             if len(prediction) == 3:
                 prediction = int(prediction[1]) # output is [2] or [26], for example, so the if elif statements are extracting the numbers
             elif len(prediction) == 4:
