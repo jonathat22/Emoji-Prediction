@@ -44,7 +44,7 @@ st.write("""
 
 def main():
     embedding_layer, word2idx, idx2word = load_embeddings()
-    sentence = st.text_input("Type in your sentence here")
+    sentence = st.text_input("Type in your sentence here \U0001F603")
     model = load_model(embedding_layer)
     model.eval()
     if len(sentence.split()) > 0:
@@ -57,9 +57,9 @@ def main():
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
             st.write(len(sentence.split()))
-    else:
-        st.write("You didn't type in a sentence!")
-        st.write("\U0001F603")
+    #else:
+        #st.write("You didn't type in a sentence!")
+        #st.write("\U0001F603")
 
 
 #with col2:
