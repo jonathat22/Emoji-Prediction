@@ -20,7 +20,7 @@ model = GRUNet(input_dim=max_length,
                 num_layers=2,
                 embedding_layer=embedding_layer,
                 embedding_dim=50,
-                batch_size=3)
+                batch_size=3).to(torch.device("mps"))
 
 model.load_state_dict(torch.load("emoji_model.pt"))
 model.eval()
