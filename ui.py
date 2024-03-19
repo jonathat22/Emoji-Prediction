@@ -60,7 +60,7 @@ def load_model(_embedding_layer):
                 embedding_dim=50,
                 batch_size=3)
 
-    model.load_state_dict(torch.load("emoji_model.pt", map_location=lambda storage, location: 'cpu'))
+    model.load_state_dict(torch.load("emoji_model.pt", map_location=lambda storage, loc: storage))
 
     return model
 
