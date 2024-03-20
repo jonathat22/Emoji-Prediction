@@ -50,10 +50,10 @@ def main():
     if len(sentence.split()) > 0:
         if len(sentence.split()) <= 10: # max sequence length is 10
             prepared_data = prepare_data(sentence, word2idx)
-            prediction = predict(prepared_data, model)[0]
-            st.write("Pred", prediction)
+            predictions = predict(prepared_data, model)[0]
+            st.write("Pred", predictions)
             emoji_map = build_emoji_df(filepath="Data/full_emoji.csv")
-            emoji = emoji_map['emoji'].iloc[prediction]
+            emoji = emoji_map['emoji'].iloc[predictions]
             st.title(emoji)
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
