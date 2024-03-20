@@ -51,7 +51,6 @@ def main():
         if len(sentence.split()) <= 10: # max sequence length is 10
             prepared_data = prepare_data(sentence, word2idx)
             prediction = predict(prepared_data, model)[0]
-            st.write("Pred", type(prediction))
             emoji_map = build_emoji_df(filepath="Data/full_emoji.csv")
             emoji = emoji_map['emoji'].iloc[prediction]
             st.title(emoji)
