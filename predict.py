@@ -46,7 +46,7 @@ def predict(prepared_data, model):
     """
     with torch.no_grad():
         predictions = model.forward(prepared_data, predict=True)
-        _, max_prediction = torch.max(predictions, dim=1)
-    result = max_prediction.numpy()
+        _, max_predictions = torch.topk(predictions, 3, dim=1)
+    result = max_predictions.numpy()
 
     return result
