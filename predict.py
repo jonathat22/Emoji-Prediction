@@ -55,5 +55,5 @@ def predict(prepared_data, model):
 
 def shap_plot(model, input_sentence):
     explainer = shap.Explainer(model)
-    shap_values = explainer(input_sentence)
+    shap_values = explainer([input_sentence])
     shap.plots.text(shap_values)
