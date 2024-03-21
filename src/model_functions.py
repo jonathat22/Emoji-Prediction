@@ -87,7 +87,7 @@ class GRUNet(ModelHelperFunctions):
             self.batch_size = 1
             hidden = torch.zeros(self.num_layers, self.batch_size, self.hidden_dim)
         else:
-            hidden = torch.zeros(self.num_layers, self.batch_size, self.hidden_dim).to(torch.device("mps"))
+            hidden = torch.zeros(self.num_layers, self.batch_size, self.hidden_dim) #.to(torch.device("mps"))
             
         x = self.embeddings(x.to(torch.int64))
         out, _ = self.gru(x, hidden) # shape: (batch_size, seq_length, hidden_size)
