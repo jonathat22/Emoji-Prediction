@@ -7,3 +7,4 @@ torch==2.2.1
 torchtext==0.17.1
 emoji==2.9.0
 unicodeit==0.7.5
+shap==0.45.0

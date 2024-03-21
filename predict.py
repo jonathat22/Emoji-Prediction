@@ -7,6 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 import torchtext
 import pandas as pd
 import numpy as np
+import shap
 import matplotlib.pyplot as plt
 from src.data_functions import *
 from src.model_functions import *
@@ -50,3 +51,9 @@ def predict(prepared_data, model):
     result = max_predictions.numpy()
 
     return result
+
+
+def shap(predictions, input_sentence):
+    explainer = shap.Explainer(predictions[0])
+    shap_values = explainer(input_sentence)
+    shap.plots.text(shap_values)
