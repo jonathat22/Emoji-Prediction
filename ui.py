@@ -56,7 +56,7 @@ def main():
             emoji2 = emoji_map['emoji'].iloc[predictions[1]]
             emoji3 = emoji_map['emoji'].iloc[predictions[2]]
             st.title(emoji1)
-            with st.expander("What were the 2nd and 3rd highest predictions"):
+            with st.expander("What were the 2nd and 3rd highest predictions?"):
                 st.subheader(emoji2)
                 st.subheader(emoji3)
         else:
