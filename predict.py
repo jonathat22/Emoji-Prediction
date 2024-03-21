@@ -60,6 +60,7 @@ def load_training_data():
 
 
 def shap_plot(model, word_to_index, input_sentence, max_length=10):
+    model=model.to(torch.device("mps"))
     X_train = load_training_data()
     X_indices = sentences_to_indices(X_train, word_to_index, max_length)
     explainer = shap.DeepExplainer(model, X_indices)
