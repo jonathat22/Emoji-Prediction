@@ -57,7 +57,7 @@ def main():
             emoji3 = emoji_map['emoji'].iloc[predictions[2]]
             st.title(emoji1)
             second_emoji, third_emoji = st.columns(2)
-            second_emoji.header(emoji2)
+            second_emoji.header(emoji2, third_emoji)
             third_emoji.header(emoji3)
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
