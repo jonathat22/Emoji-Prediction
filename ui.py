@@ -59,7 +59,7 @@ def main():
             with st.expander("What were the 2nd and 3rd highest predictions?"):
                 st.subheader(emoji2)
                 st.subheader(emoji3)
-                shap_plot(model, sentence)
+                shap_plot(model, word2idx, sentence)
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
             st.write(len(sentence.split()))

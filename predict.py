@@ -59,10 +59,9 @@ def load_training_data():
     return X_train
 
 
-def shap_plot(model, word_to_index, max_length, input_sentence):
+def shap_plot(model, word_to_index, input_sentence, max_length=10):
     X_train = load_training_data()
     X_indices = sentences_to_indices(X_train, word_to_index, max_length)
-    test = prepare_data(input_sentence, word_to_index, max_length)
     explainer = shap.DeepExplainer(model, X_indices)
-    shap_values = explainer([test])
+    shap_values = explainer([input_sentence])
     shap.plots.text(shap_values)
