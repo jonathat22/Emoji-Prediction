@@ -52,7 +52,7 @@ def main():
             prepared_data = prepare_data(sentence, word2idx)
             predictions = predict(prepared_data, model)[0]
             emoji_map = build_emoji_df(filepath="Data/full_emoji.csv")
-            emoji = emoji_map['emoji'].iloc[prediction]
+            emoji = emoji_map['emoji'].iloc[predictions]
             st.title(emoji)
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
