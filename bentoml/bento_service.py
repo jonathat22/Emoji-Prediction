@@ -2,8 +2,8 @@ import bentoml
 import torch
 import numpy as np
 from bentoml.io import Text, NumpyNdarray
-from src.data_functions import *
-from src.model_functions import *
+from data_modeling_helper_code.data_functions import *
+from data_modeling_helper_code.model_functions import *
 
 
 def create_bento_service_torch(bento_name):

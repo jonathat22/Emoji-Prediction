@@ -9,8 +9,8 @@ import pandas as pd
 import numpy as np
 import shap
 import matplotlib.pyplot as plt
-from src.data_functions import *
-from src.model_functions import *
+from data_modeling_helper_code.data_functions import *
+from data_modeling_helper_code.model_functions import *
 
 
 @st.cache_data

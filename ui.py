@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import emoji
 import unicodeit
-from src.map_pred_to_emoji import *
+from data_modeling_helper_code.map_pred_to_emoji import *
 from predict import *
 
 

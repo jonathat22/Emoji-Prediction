@@ -7,8 +7,8 @@ import torchtext
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from src.data_functions import *
-from src.model_functions import *
+from data_modeling_helper_code.data_functions import *
+from data_modeling_helper_code.model_functions import *
 import bentoml
 
 
