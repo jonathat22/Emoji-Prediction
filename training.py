@@ -14,14 +14,16 @@ import bentoml
 
 def main():
     batch_size = 3
-    X_train, y_train = read_emoji_csv('Data/train_emoji.csv')
-    X_test, y_test = read_emoji_csv('Data/test_emoji.csv')
-    max_length  = len(max(X_train, key=len).split())
-    embedding_layer, word2idx, idx2word = torch_pretrained_embedding()
-    train_loader, test_loader = build_dataloaders(X_train, X_test, y_train, y_test, word2idx, max_length, batch_size)
+    features_training, targets_training = read_emoji_csv('Data/train_emoji.csv')
+    features_testing, targets_testing = read_emoji_csv('Data/test_emoji.csv')
+    max_sequence_length  = len(max(features_training, key=len).split())
+    embedding_layer, word_to_index_map, index_to_word_map = torch_pretrained_embedding()
+    train_loader, test_loader = build_dataloaders(features_training, features_testing, 
+                                                  targets_training, targets_testing, 
+                                                  word_to_index_map, max_sequence_length, batch_size)
 
     embedding_dim = 50
-    sequence_length = max_length
+    sequence_length = max_sequence_length
     hidden_size = 128
     num_classes = 30
     num_epochs = 25
