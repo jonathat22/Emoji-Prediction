@@ -5,9 +5,9 @@ import torch
 import emoji
 import unicodeit
 from src.map_pred_to_emoji import *
+from predict import *
 
-# "http://localhost:3000/predict"
-API_ENDPOINT = "http://localhost:3000/predict"
+
 
 st.set_page_config(layout="wide")
 
@@ -38,45 +38,40 @@ st.write("""
     predict the most relevant emoji for an input sentence. \U0001F92F
 """)
 
-def predict(sentence):
-    """
-    A function that sends a prediction request to the API and returns the predicted emoji
-    """
-    response = requests.post(API_ENDPOINT, headers={"content-type": "text/plain"}, data=sentence)
 
-    if response.status_code == 200:
-        return response.text
-    else:
-        raise Exception("Status: {}".format(response.status_code))
+####################################### Model Inference #############################################
 
 
 def main():
-    sentence = st.text_input("Type in your sentence here")
+    embedding_layer, word2idx, idx2word = load_embeddings()
+    sentence = st.text_input("Type in your sentence here \U0001F603")
+    model = load_model(embedding_layer)
+    model.eval()
     if len(sentence.split()) > 0:
         if len(sentence.split()) <= 10: # max sequence length is 10
-            prediction = predict(sentence)
-            st.write(prediction)
-            if len(prediction) == 3:
-                prediction = int(prediction[1]) # output is [2] or [26], for example, so the if elif statements are extracting the numbers
-            elif len(prediction) == 4:
-                prediction = int(prediction[1:3])
+            prepared_data = prepare_data(sentence, word2idx)
+            predictions = predict(prepared_data, model)[0]
             emoji_map = build_emoji_df(filepath="Data/full_emoji.csv")
-            emoji_name = emoji_map['name'].iloc[prediction]
-            st.title(emoji.emojize(f":{emoji_name}:"))
-            #st.success(f"Your predicted emoji is {prediction:.3f}")
+            emoji1 = emoji_map['emoji'].iloc[predictions[0]]
+            emoji2 = emoji_map['emoji'].iloc[predictions[1]]
+            emoji3 = emoji_map['emoji'].iloc[predictions[2]]
+            st.title(emoji1)
+            with st.expander("What were the 2nd and 3rd highest predictions?"):
+                st.subheader(emoji2)
+                st.subheader(emoji3)
         else:
             st.write("Sequence is too long. It must have 10 or fewer words.")
             st.write(len(sentence.split()))
-    else:
-        st.write("You didn't type in a sentence!")
-        st.write("\U0001F603")
+    #else:
+        #st.write("You didn't type in a sentence!")
+        #st.write("\U0001F603")
 
 
 #with col2:
 with st.expander("All about GRUs \U0001F9E0"):
     col1, col2 = st.columns(2)
 
-    #######################################    RNN Section   ########################################################
+############################################    RNN Section   ########################################################
 
 
     col1.header("Recurrent Neural Network")
@@ -153,16 +148,10 @@ with st.expander("All about GRUs \U0001F9E0"):
     col2.write("Note: Wxr, Whr, Wxz, Whz, Wxh, Whh are weight matricies, br, bz, bh are bias parameters. These are the parameters that are learned during training.")
 
 
-
-    
-
-
-        
-
-
 with st.sidebar:
     st.markdown("---")
     st.markdown("# About")
+    st.markdown("By Jonathan Taylor")
     st.markdown("Here, I use Natual Language Processing to explor the relationship between text and emojis \U0001F913")
     st.markdown("Type in a sentence and recieve a sentiment classification prediction in the form of an emoji!")
 

@@ -2,6 +2,7 @@ import emoji
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import streamlit as st
 
 
 def convert_unicode_column(emoji_df):
@@ -72,6 +73,7 @@ def subset_emoji_df(full_emoji):
     return data
 
 
+@st.cache_data
 def build_emoji_df(filepath):
     """
     loads and processes full emoji dataset.
