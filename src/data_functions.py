@@ -10,62 +10,62 @@ import matplotlib.pyplot as plt
 
 
 
-def convert_to_one_hot(Y, num_emojis):
+def convert_to_one_hot(ground_truth_labels, num_classes):
     """
-    One hot encodes Y labels
+    One hot encodes ground truth labels labels.
 
     Arguments:
-    Y -- array containing the indices of the ground truth emoji
+    ground_truth_labels -- array containing the indices of the ground truth emoji
     num_emojis -- the number of classes
 
     Returns:
-    Y -- array with one hot encoded vectors of each target emoji
+    one_hot_ground_truth_labels -- array with one hot encoded vectors of each target emoji
     """
-    Y = np.eye(num_emojis)[Y.reshape(-1)]
-    return Y
+    one_hot_ground_truth_labels = np.eye(num_classes)[ground_truth_labels.reshape(-1)]
+    return one_hot_ground_truth_labels
 
 
 
-def read_emoji_csv(path):
+def read_emoji_csv(emoji_dataset_filepath):
     """
-    Reads emoji dataset
+    Reads emoji dataset.
+    This function is used to load both training and testing datasets.
 
     Argument:
-    path -- location of the dataset
+    emoji_dataset_filepath -- location of the dataset
 
     Returns:
-    X -- array of training data sentences
-    y -- array of indices representing the target emoji for each X sentence 
+    features -- array of training/testing data sentences
+    targets -- array of indices representing the target emoji for each sentence in features 
     """
-    data = pd.read_csv(path, header=None)
-    X = data.iloc[:,0].values
-    y = data.iloc[:,1].values
-    return X, y
+    loaded_emoji_data = pd.read_csv(emoji_dataset_filepath, header=None)
+    features = loaded_emoji_data.iloc[:,0].values
+    targets = loaded_emoji_data.iloc[:,1].values
+    return features, targets
 
 
 
-def sentences_to_indices(X, word_to_index, max_len):
+def sentences_to_indices(features, word_to_index, max_sequence_length):
     """
     Converts an array of sentences (strings) into an array of indices corresponding to words in the sentences.
     The output shape should be such that it can be given to `Embedding()` (described in Figure 4). 
     
     Arguments:
-    X -- array of sentences (strings), of shape (m,)
+    features -- array of sentences (strings), of shape (m,)
     word_to_index -- a dictionary containing the each word mapped to its index
-    max_len -- maximum number of words in a sentence. You can assume every sentence in X is no longer than this. 
+    max_sequence_length -- maximum number of words in a sentence. You can assume every sentence in features is no longer than this. 
     
     Returns:
-    X_indices -- array of indices corresponding to words in the sentences from X, of shape (m, max_len)
+    features_indices -- array of indices corresponding to words in the sentences from features, of shape (m, max_sequence_length)
     """
+    number_of_sentences = features.shape[0]
+    features_indices = np.zeros((number_of_sentences, max_sequence_length)).astype(np.float32)
+    for sentence in range(number_of_sentences):
+        sentence_words = [i.lower() for i in features[sentence].split()]
+        for index, word in enumerate(sentence_words):
+            features_indices[sentence, index] = word_to_index[word]
     
-    m = X.shape[0]
-    X_indices = np.zeros((m, max_len)).astype(np.float32)
-    for i in range(m):
-        sentence_words = [i.lower() for i in X[i].split()]
-        for idx, val in enumerate(sentence_words):
-            X_indices[i, idx] = word_to_index[val]
-    
-    return X_indices
+    return features_indices
 
 
 
@@ -75,18 +75,18 @@ def torch_pretrained_embedding(load=False):
 
     Returns:
     embedding layer -- pretrained layer
-    word2idx -- dictionary mapping each word to its index
-    idx2word -- dictionary mapping index to word
+    word_to_index_map -- dictionary mapping each word to its index
+    index_to_word_map -- dictionary mapping index to word
     """
     if load == True:
         glove = torch.load("src/saved_glove.pt")
     else:
         glove = torchtext.vocab.GloVe(name='6B', dim=50)
 
-    word2idx = glove.stoi
-    idx2word = glove.itos
+    word_to_index_map = glove.stoi
+    index_to_word_map = glove.itos
     embedding_layer = nn.Embedding.from_pretrained(glove.vectors, freeze=True)
-    return embedding_layer, word2idx, idx2word
+    return embedding_layer, word_to_index_map, index_to_word_map
 
 
 
@@ -108,26 +108,28 @@ class EmojiDataset():
 
 
 
-def build_dataloaders(X_train, X_test, y_train, y_test, word2idx, max_length, batch_size):
+def build_dataloaders(features_training, features_testing, 
+                      targets_training, targets_testing, 
+                      word_to_index_map, max_sequence_length, batch_size):
     """
     Constructs train and test data loaders
 
     Arguments:
-    X_train -- training data
-    X_test -- testing data
-    y_train -- training labels
-    y_test -- testing labels
+    features_training -- training data
+    features_testing -- testing data
+    targets_training -- training labels
+    targets_testing -- testing labels
 
     Returns:
     train_loader -- train DataLoader object
     test_loader -- test DataLoader object
     """
-    X_train_indices = sentences_to_indices(X_train, word2idx, max_length)
-    X_test_indices = sentences_to_indices(X_test, word2idx, max_length)
-    y_train_oh = convert_to_one_hot(y_train, num_emojis = 30)
-    y_test_oh = convert_to_one_hot(y_test, num_emojis = 30)
-    train_data = EmojiDataset(X_features=X_train_indices, y_labels=y_train_oh)
-    test_data = EmojiDataset(X_features=X_test_indices, y_labels=y_test_oh)
+    features_train_indices = sentences_to_indices(features_training, word_to_index_map, max_sequence_length)
+    features_test_indices = sentences_to_indices(features_testing, word_to_index_map, max_sequence_length)
+    one_hot_targets_train = convert_to_one_hot(targets_training, num_emojis = 30)
+    one_hot_targets_test = convert_to_one_hot(targets_testing, num_emojis = 30)
+    train_data = EmojiDataset(X_features=features_train_indices, y_labels=one_hot_targets_train)
+    test_data = EmojiDataset(X_features=features_test_indices, y_labels=one_hot_targets_test)
     train_loader = DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size=batch_size, shuffle=False)
 
