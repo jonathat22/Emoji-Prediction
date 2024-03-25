@@ -16,7 +16,7 @@ def convert_to_one_hot(ground_truth_labels, num_classes):
 
     Arguments:
     ground_truth_labels -- array containing the indices of the ground truth emoji
-    num_emojis -- the number of classes
+    num_classes -- the number of classes
 
     Returns:
     one_hot_ground_truth_labels -- array with one hot encoded vectors of each target emoji
@@ -45,25 +45,25 @@ def read_emoji_csv(emoji_dataset_filepath):
 
 
 
-def sentences_to_indices(features, word_to_index, max_sequence_length):
+def sentences_to_indices(features, word_to_index_map, max_sequence_length):
     """
     Converts an array of sentences (strings) into an array of indices corresponding to words in the sentences.
     The output shape should be such that it can be given to `Embedding()` (described in Figure 4). 
     
     Arguments:
-    features -- array of sentences (strings), of shape (m,)
-    word_to_index -- a dictionary containing the each word mapped to its index
+    features -- array of sentences (strings), of shape (number_of_sentences, )
+    word_to_index_map -- a dictionary containing the each word mapped to its index
     max_sequence_length -- maximum number of words in a sentence. You can assume every sentence in features is no longer than this. 
     
     Returns:
-    features_indices -- array of indices corresponding to words in the sentences from features, of shape (m, max_sequence_length)
+    features_indices -- array of indices corresponding to words in the sentences from features, of shape (number_of_sentences, max_sequence_length)
     """
     number_of_sentences = features.shape[0]
     features_indices = np.zeros((number_of_sentences, max_sequence_length)).astype(np.float32)
     for sentence in range(number_of_sentences):
         sentence_words = [i.lower() for i in features[sentence].split()]
         for index, word in enumerate(sentence_words):
-            features_indices[sentence, index] = word_to_index[word]
+            features_indices[sentence, index] = word_to_index_map[word]
     
     return features_indices
 
