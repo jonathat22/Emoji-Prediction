@@ -74,7 +74,7 @@ def subset_emoji_emoji_names_unicode_data(full_emoji):
 
 
 @st.cache_data
-def build_emoji_df(emoji_names_unicode_data_path):
+def build_emoji_df(emoji_unicode_filepath):
     """
     loads and processes full emoji dataset.
     calls convert_unicode_column() and subset_emoji_df()
@@ -86,7 +86,7 @@ def build_emoji_df(emoji_names_unicode_data_path):
     emoji_df -- dataframe containing index, emoji and unicode columns
     """
 
-    full_emoji = pd.read_csv(emoji_names_unicode_data_path)
+    full_emoji = pd.read_csv(emoji_unicode_filepath)
     most_popular_emojis_df = subset_emoji_emoji_names_unicode_data(full_emoji)
     most_popular_emojis_df = convert_unicode_column(most_popular_emojis_df)
     unnessecary_columns = ["index", "#", "Apple", 
