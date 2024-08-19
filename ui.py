@@ -152,7 +152,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("# About")
     st.markdown("By Jonathan Taylor")
-    st.markdown("Here, I use Natual Language Processing to explor the relationship between text and emojis \U0001F913")
+    st.markdown("Here, I use Natual Language Processing to explore the relationship between text and emojis \U0001F913")
     st.markdown("Type in a sentence and recieve a sentiment classification prediction in the form of an emoji!")
 
     st.markdown("---")
