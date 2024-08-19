@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import numpy as np
 import torch
+from torchsummary import summary
 import emoji
 import unicodeit
 from data_modeling_helper_code.map_pred_to_emoji import *
@@ -46,11 +47,15 @@ def main():
     embedding_layer, word2idx, idx2word = load_embeddings()
     sentence = st.text_input("Type in your sentence here \U0001F603")
     model = load_model(embedding_layer)
+    st.write(model.fc.weight[:, :].data)
+    st.write(model.softmax)
     model.eval()
     if len(sentence.split()) > 0:
         if len(sentence.split()) <= 10: # max sequence length is 10
             prepared_data = prepare_data(sentence, word2idx)
+            st.write(prepared_data)
             predictions = predict(prepared_data, model)[0]
+            st.write("Predictions", predictions)
             emoji_map = build_emoji_df(emoji_unicode_filepath="Data/full_emoji.csv")
             emoji1 = emoji_map['emoji'].iloc[predictions[0]]
             emoji2 = emoji_map['emoji'].iloc[predictions[1]]
@@ -152,7 +157,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("# About")
     st.markdown("By Jonathan Taylor")
-    st.markdown("Here, I use Natual Language Processing to explor the relationship between text and emojis \U0001F913")
+    st.markdown("Here, I use Natual Language Processing to explore the relationship between text and emojis \U0001F913")
     st.markdown("Type in a sentence and recieve a sentiment classification prediction in the form of an emoji!")
 
     st.markdown("---")
